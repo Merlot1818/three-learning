@@ -1,0 +1,24 @@
+{
+  "name": "three-learning",
+  "version": "1.0.0",
+  "description": "three fundamentals learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server":"node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Merlot1982/three-learning.git"
+  },
+  "author": "jeff.fu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Merlot1982/three-learning/issues"
+  },
+  "homepage": "https://github.com/Merlot1982/three-learning#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "express": "^4.16.4"
+  }
+}

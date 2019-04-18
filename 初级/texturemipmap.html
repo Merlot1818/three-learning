@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <style>
+        canvas {
+            width: 100%;
+            height: 100%
+        }
+    </style>
+    <script src="../libs/three.js"></script>
+    <script>
+        var camera, scene, renderer, line;
+        function load() {
+            initScene();
+            initCamera();
+            initRenderer();
+            initObject();
+            render();
+        }
+
+        function initCamera() {
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+            camera.position.z = 100;
+        }
+
+        function initScene() {
+            scene = new THREE.Scene();
+        }
+
+        function initRenderer() {
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+        }
+
+        function initLight() {
+
+        }
+
+        function initObject() {
+            function mipmap(size, color) {
+                var imageCanvas = document.createElement("canvas"),
+                    context = imageCanvas.getContext("2d");
+
+                imageCanvas.width = imageCanvas.height = size;
+                context.fillStyle = "#444";
+                context.fillRect(0, 0, size, size);
+                context.fillStyle = color;
+                context.fillRect(0, 0, size / 2, size / 2);
+                context.fillRect(size / 2, size / 2, size / 2, size / 2);
+                return imageCanvas;
+            }
+
+            var canvas = mipmap(128, '#f00');
+            var textureCanvas1 = new THREE.CanvasTexture(canvas);
+            textureCanvas1.mipmaps[0] = canvas;
+            textureCanvas1.mipmaps[1] = mipmap(64, '#0f0');
+            textureCanvas1.mipmaps[2] = mipmap(32, '#00f');
+            textureCanvas1.mipmaps[3] = mipmap(16, '#400');
+            textureCanvas1.mipmaps[4] = mipmap(8, '#040');
+            textureCanvas1.mipmaps[5] = mipmap(4, '#004');
+            textureCanvas1.mipmaps[6] = mipmap(2, '#044');
+            textureCanvas1.mipmaps[7] = mipmap(1, '#404');
+            textureCanvas1.repeat.set(1000, 1000);
+            textureCanvas1.wrapS = THREE.RepeatWrapping;
+            textureCanvas1.wrapT = THREE.RepeatWrapping;
+
+            var textureCanvas2 = textureCanvas1.clone();
+            textureCanvas2.magFilter = THREE.NearestFilter;
+            textureCanvas2.minFilter = THREE.NearestMipMapNearestFilter;
+
+            canvas1 = new THREE.MeshBasicMaterial({ map: textureCanvas1 });
+            canvas2 = new THREE.MeshBasicMaterial({ map: textureCanvas2, color: 0xffccaa });
+
+            var geometry = new THREE.PlaneGeometry(100, 100, 1, 1);
+
+            var mesh1 = new THREE.Mesh(geometry, canvas1);
+            // mesh1.rotation.x = -Math.PI / 2;
+            mesh1.scale.set(1000, 1000, 1000);
+            scene.add(mesh1);
+
+            var mesh2 = new THREE.Mesh(geometry, canvas2);
+            // mesh2.rotation.x = -Math.PI / 2;
+            mesh2.scale.set(1000, 1000, 1000);
+            scene.add(mesh2);
+        }
+
+        function render() {
+            requestAnimationFrame(render);
+            camera.position.z += 1;
+            renderer.render(scene, camera);
+        }
+    </script>
+</head>
+
+<body onload="load();">
+</body>
+
+</html>
